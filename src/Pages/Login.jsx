@@ -1,9 +1,15 @@
-import { use } from "react";
-import { Link } from "react-router";
+import { use, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router";
 import { AuthContext } from "../Provider/AuthProvider";
 
 const Login = () => {
+    const [error, setError] = useState("");
     const { signIn } = use(AuthContext);
+
+    const location = useLocation();
+    const navigate = useNavigate();
+    console.log("login page", location);
+
     const handleLogin = (event) => {
         event.preventDefault();
         const form = event.target;
@@ -14,11 +20,14 @@ const Login = () => {
             .then(result => {
                 const user = result.user;
                 console.log(user);
+                //user data save korte hobe context 
+                navigate(`${location.state? location.state : '/'}`);
                 alert("User has been logged in successfully");
             })
             .catch(error => {
                 const errorMessage = error.message;
-                alert(errorMessage);
+                setError(errorMessage);
+                //alert(errorMessage);
             })  
         // Call your login function here
     };
@@ -35,7 +44,8 @@ const Login = () => {
                          name="email" 
                          type="email" 
                          className="input" 
-                         placeholder="Email" 
+                         placeholder="Email"
+                            required 
                          />
                         {/*Password*/}
                         <label className="label">Password</label>
@@ -43,9 +53,11 @@ const Login = () => {
                          name="password" 
                          type="password" 
                          className="input" 
-                         placeholder="Password" 
+                         placeholder="Password"
+                         required
                          />
                         <div><a className="link link-hover">Forgot password?</a></div>
+                        {error && <p className="text-red-400 text-xs">{error}</p>}
                         <button type="submit" className="btn btn-neutral mt-4">Login</button>
                         <p className=" font-semibold text-center pt-5">
                             Don't have an account?{""} <Link to="/auth/register" className="text-secondary">Register
