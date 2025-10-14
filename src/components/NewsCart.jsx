@@ -1,4 +1,5 @@
 //chatgpt hellpcode
+import { format } from 'date-fns';
 import React, { useState } from 'react';
 import { FaEye, FaStar, FaRegBookmark, FaBookmark } from 'react-icons/fa';
 import { FaShareNodes } from 'react-icons/fa6';
@@ -82,21 +83,21 @@ const NewsCart = ({ news }) => {
         <strong>Tags:</strong> {tags.join(', ')}
       </div>
 
-      {/* Description */}
-      <div className="px-4 pt-2 pb-3 text-sm text-gray-700">
-        {details.slice(0, 200)}...
-        <span
-          className="text-orange-500 font-semibold cursor-pointer ml-1 hover:underline"
-          onClick={() => setIsModalOpen(true)}
-        >
-          Read More
-        </span>
-        <span className="ml-2">
-          <Link to={`/news/${id}`} className="text-blue-500 hover:underline">
-            Go to Details Page
+      {/* Details */}
+      <div className=''>
+        {details.length > 250 ? (
+          <>
+          {details.slice(0, 250)}...
+          <Link to={`/news-details/${id}`} 
+          className='text-orange-400 font-semibold cursor-pointer hover:underline'>
+            Read More
           </Link>
-        </span>
+          </>
+        ) : (
+          details
+        )}
       </div>
+        
 
       {/* Footer */}
       <div className="card-actions justify-between items-center border-t px-4 py-3 text-sm text-gray-700">
