@@ -8,16 +8,20 @@ const auth = getAuth(app); // Assume getAuth is imported from your auth library
 const AuthProvider = ({ children }) => {
 
     const [user, setUser] = useState(null);
+    //user loading state
+    const [loading, setLoading] = useState(true);
 
-    console.log("Auth provider", user);
+    console.log(loading, user);
 
 
 
     const createUser = (email, password) => {
+        setLoading(true);
         return createUserWithEmailAndPassword(auth, email, password);
     }
 
     const signIn = (email, password) => {
+        setLoading(true);
         //console.log("user trying to logout");
         return signInWithEmailAndPassword(auth, email, password);
     }
@@ -30,6 +34,7 @@ const AuthProvider = ({ children }) => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
+            setLoading(false);
         });
         return () => unsubscribe();
     }, []);
@@ -39,7 +44,9 @@ const AuthProvider = ({ children }) => {
         setUser,
         createUser,
         logOut,
-        signIn
+        signIn,
+        loading,
+        setLoading,
     };
     return (
         <div>
